@@ -1,17 +1,26 @@
 import React, { Component } from 'react';
-import { Text } from 'react-native';
+import { Text, TouchableWithoutFeedback, View } from 'react-native';
+import { connect } from 'react-redux';
 import { CardSection } from './common';
+import * as actions from '../actions';
 
 class ListItem extends Component {
   render() {
     const { titleStyle } = styles;
+    const { id, title } = this.props.library.item;
 
     return (
-      <CardSection>
-        <Text style={titleStyle}>
-          {this.props.library.item.title}
-        </Text>
-      </CardSection>
+      <TouchableWithoutFeedback
+        onPress={() => this.props.selectLibrary(id)}
+      >
+        <View>
+          <CardSection>
+            <Text style={titleStyle}>
+              {title}
+            </Text>
+          </CardSection>
+        </View>
+      </TouchableWithoutFeedback>
     );
   }
 }
@@ -23,4 +32,7 @@ const styles = {
   }
 };
 
-export default ListItem;
+//turns action creator into
+//something where return action dispatched to redux store and then takes actions
+//and passes them to our component as props
+export default connect(null, actions)(ListItem);
