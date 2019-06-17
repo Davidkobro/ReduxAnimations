@@ -5,9 +5,22 @@ import { CardSection } from './common';
 import * as actions from '../actions';
 
 class ListItem extends Component {
+  renderDescription() {
+    const { library, expanded } = this.props;
+
+    if (expanded) {
+      return (
+        <CardSection>
+          <Text>{library.item.description} </Text>
+        </CardSection>
+      );
+    }
+  }
+
   render() {
     const { titleStyle } = styles;
     const { id, title } = this.props.library.item;
+
 
     return (
       <TouchableWithoutFeedback
@@ -19,6 +32,7 @@ class ListItem extends Component {
               {title}
             </Text>
           </CardSection>
+          {this.renderDescription()}
         </View>
       </TouchableWithoutFeedback>
     );
@@ -32,7 +46,12 @@ const styles = {
   }
 };
 
+const mapStateToProps = (state, ownProps) => {
+  const expanded = state.selectedLibraryId === ownProps.library.item.id;
+  return { expanded };
+};
+
 //turns action creator into
 //something where return action dispatched to redux store and then takes actions
 //and passes them to our component as props
-export default connect(null, actions)(ListItem);
+export default connect(mapStateToProps, actions)(ListItem);
